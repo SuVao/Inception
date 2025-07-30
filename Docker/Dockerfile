@@ -14,3 +14,4 @@ RUN gcc main.c -o main
 
 # Executa o binário compilado ao rodar o container
 CMD ["./main"]
+server_name pedro.42.fr;
