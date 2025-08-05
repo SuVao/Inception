@@ -1,0 +1,40 @@
+.git
+.gitignore
+
+# Ignorar arquivos temporários e cache
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+*.orig
+*.DS_Store
+Thumbs.db
+
+# Ignorar build e cache locais
+node_modules
+vendor
+.cache
+tmp
+logs
+dist
+
+# Arquivos do sistema
+ehthumbs.db
+Icon?
+
+# Backups e arquivos de editor
+*.sublime-project
+*.sublime-workspace
+.vscode
+.idea
+
+# Arquivos do WordPress nao nesseçarios
+wp-content/cache/
+wp-content/uploads/
+wp-content/upgrade/
+
+# Evitar mandar o próprio .dockerignore e docker-compose para dentro da imagem
+docker-compose.yml
+Dockerfile
+*.md

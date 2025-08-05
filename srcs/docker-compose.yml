@@ -6,10 +6,35 @@ services:
       context: ./requirements/nginx
     container_name: nginx
     ports:
-     - "443:443" 
+     - "443:443"
     volumes:
-     - nginx:/var/www/html
+     - wordpress:/var/www/html
+     - ./requirements/nginx/ssl:/etc/nginx/ssl
     restart: always
 
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    container_name: wordpress
+    volumes:
+      - wordpress:/var/www/html 
+    restart: always
+
+  db:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
 volumes: 
+  wordpress:
   nginx:
+  db_data:

@@ -1,38 +1,37 @@
-NAME = inception
+PROJECT_NAME = inception
 
-COMPOSE_FILE = srcs/docker-compose.yml
-VOLUME_PATH = /home/$(USER)/data
+COMPOSE = docker-compose
+DC_FILE = srcs/docker-compose.yml
 
-DOCKER_COMPOSE = docker-compose -f $(COMPOSE_FILE)
+SERVICES = nginx wordpress
+
+VOLUMES = nginx wordpress
+
+GREEN  = \033[0;32m
+RESET  = \033[0m
+
+.PHONY: all build up down clean fclean re
 
 all: up
 
+build:
+	@echo "$(GREEN)[BUILDING IMAGES]$(RESET)"
+	@$(COMPOSE) -f $(DC_FILE) build --no-cache
+
 up:
-	@sudo mkdir -p $(VOLUME_PATH)/mariadb $(VOLUME_PATH)/wordpress
-	@$(DOCKER_COMPOSE) up -d --build
+	@echo "$(GREEN)[STARTING CONTAINERS]$(RESET)"
+	@$(COMPOSE) -f $(DC_FILE) up -d --build
 
 down:
-	@$(DOCKER_COMPOSE) down
+	@echo "$(GREEN)[STOPPING CONTAINERS]$(RESET)"
+	@$(COMPOSE) -f $(DC_FILE) down
 
-stop:
-	@$(DOCKER_COMPOSE) stop
+clean:
+	@echo "$(GREEN)[REMOVING VOLUMES]$(RESET)"
+	@docker volume rm $(addprefix $(PROJECT_NAME)_, $(VOLUMES)) 2>/dev/null || true
 
-start:
-	@$(DOCKER_COMPOSE) start
-
-restart: down up
-
-logs:
-	@$(DOCKER_COMPOSE) logs -f
-
-clean: down
-	@sudo docker system prune -af
-	@sudo docker volume rm $$(sudo docker volume ls -q 2>/dev/null) 2>/dev/null || true
-
-fclean: clean
-	@sudo rm -rf $(VOLUME_PATH)
-	@echo "🔥 Todos os volumes e containers removidos!"
+fclean: down clean
+	@echo "$(GREEN)[REMOVING UNUSED IMAGES]$(RESET)"
+	@docker image prune -af
 
 re: fclean all
-
-.PHONY: all up down stop start restart logs clean fclean re
