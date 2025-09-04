@@ -23,16 +23,27 @@ services:
   db:
     image: mariadb:10.11
     container_name: mariadb
-    restart: unless-stopped
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_pass
+      MYSQL_USER: pesilva-
+      MYSQL_PASSWORD: /run/secrets/db_password
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_password
+  
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+
+
 
 volumes: 
   wordpress:
