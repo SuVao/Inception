@@ -1,6 +1,6 @@
 PROJECT_NAME = inception
 
-COMPOSE = docker-compose
+COMPOSE = docker compose
 DC_FILE = -f srcs/docker-compose.yml
 
 SERVICES = nginx wordpress

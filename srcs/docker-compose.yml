@@ -24,9 +24,10 @@ services:
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DB_USER: pesilva-
+      WORDPRESS_DB_USER: /run/secrets/credentials
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
     secrets:
+      - credentials
       - db_password
     depends_on:
       - db
@@ -47,6 +48,8 @@ services:
       - db_password
   
 secrets:
+  credentials:
+    file: ../secrets/credentials.txt
   db_root_password:
     file: ../secrets/db_root_password.txt
   db_password:
